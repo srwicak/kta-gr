@@ -1,0 +1,138 @@
+<div class="min-h-screen bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="inline-block bg-white/10 backdrop-blur-sm rounded-full p-4 mb-4">
+        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-white mb-2">Profil Anggota</h1>
+      <p class="text-red-100">Gerakan Rakyat</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Header Card -->
+      <div class="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white mb-1"><%= @member.name %></h2>
+        <p class="text-red-100 text-sm">Anggota Gerakan Rakyat</p>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8">
+        <!-- Info Grid -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <!-- NIK -->
+          <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+            <div class="flex items-start">
+              <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-red-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">NIK</p>
+                <p class="text-lg font-mono font-bold text-gray-900"><%= @member.nik.gsub(/\d(?=\d{4})/, '•') %></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- No. KTA -->
+          <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-5 border border-red-200">
+            <div class="flex items-start">
+              <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-red-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-semibold text-red-700 uppercase tracking-wide mb-1">No. Kartu Anggota</p>
+                <p class="text-lg font-mono font-bold text-red-900"><%= @member.kta_number %></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wilayah -->
+          <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+            <div class="flex items-start">
+              <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-red-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Kode Wilayah</p>
+                <p class="text-lg font-mono font-bold text-gray-900"><%= @member.dom_area6_code.presence || @member.area6_code %></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tanggal Lahir -->
+          <% if @member.birthdate %>
+          <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+            <div class="flex items-start">
+              <div class="flex-shrink-0">
+                <svg class="w-6 h-6 text-red-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Tanggal Lahir</p>
+                <p class="text-lg font-bold text-gray-900"><%= @member.birthdate.strftime("%d %B %Y") %></p>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-4">
+          <!-- Download KTA Button -->
+          <%= link_to kta_member_path(@member, format: :pdf), target: '_blank', class: "block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-200" do %>
+            <span class="flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Download Kartu Anggota (KTA)
+            </span>
+          <% end %>
+
+          <!-- Logout Button -->
+          <%= button_to session_path, method: :delete, class: "block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-lg shadow transform hover:scale-105 transition duration-200 border-2 border-gray-300" do %>
+            <span class="flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              Keluar
+            </span>
+          <% end %>
+        </div>
+
+        <!-- Info Box -->
+        <div class="mt-8 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+          <div class="flex">
+            <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <div class="text-sm text-blue-700">
+              <p class="font-semibold mb-1">Informasi Penting</p>
+              <p>Kartu Tanda Anggota (KTA) adalah bukti keanggotaan resmi Anda di Gerakan Rakyat. Simpan dengan baik dan gunakan sesuai ketentuan organisasi.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Home Link -->
+    <div class="text-center mt-6">
+      <%= link_to root_path, class: "inline-flex items-center text-white hover:text-red-100 transition" do %>
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Kembali ke Beranda
+      <% end %>
+    </div>
+  </div>
+</div>
