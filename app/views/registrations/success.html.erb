@@ -1,0 +1,222 @@
+<!-- app/views/registrations/success.html.erb -->
+<div class="min-h-screen bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-12 px-4 relative overflow-hidden">
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none"></canvas>
+  
+  <div class="max-w-2xl mx-auto relative z-10">
+    <!-- Success Card -->
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden transform animate-scale-in">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-10 text-center">
+        <!-- Animated Check Icon -->
+        <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full mb-4 animate-bounce-in">
+          <svg class="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        
+        <h1 class="text-4xl font-bold text-white mb-2">Selamat!</h1>
+        <p class="text-green-100 text-lg">Pendaftaran Anda Berhasil</p>
+      </div>
+
+      <!-- Content -->
+      <div class="px-8 py-10">
+        <!-- Welcome Message -->
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-3">
+            Anda Telah Menjadi Anggota<br/>
+            <span class="text-green-600">Gerakan Rakyat</span>
+          </h2>
+          <p class="text-gray-600">Terima kasih telah bergabung bersama kami</p>
+        </div>
+
+        <!-- Member Number Card -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-300 rounded-2xl p-8 mb-8">
+          <div class="text-center">
+            <p class="text-sm font-semibold text-green-700 uppercase tracking-wide mb-2">Nomor Anggota Anda</p>
+            <div class="bg-white rounded-lg px-6 py-4 inline-block shadow-lg">
+              <p class="text-3xl font-bold text-green-600 font-mono tracking-wider">
+                <%= @member.kta_number_formatted %>
+              </p>
+            </div>
+            <p class="text-xs text-green-600 mt-3">Simpan nomor ini dengan baik</p>
+          </div>
+        </div>
+
+        <!-- Member Info -->
+        <div class="bg-gray-50 rounded-xl p-6 mb-8">
+          <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+            </svg>
+            Informasi Anggota
+          </h3>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Nama:</span>
+              <span class="font-semibold text-gray-900"><%= @member.name %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">NIK:</span>
+              <span class="font-mono text-gray-900"><%= @member.nik.gsub(/\d(?=\d{4})/, '•') %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">No. HP:</span>
+              <span class="font-mono text-gray-900"><%= @member.phone %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 mb-8">
+          <div class="flex">
+            <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <div class="text-sm text-blue-700">
+              <p class="font-semibold mb-1">Langkah Selanjutnya:</p>
+              <ul class="list-disc list-inside space-y-1">
+                <li>Gunakan NIK untuk login</li>
+                <li>Password Anda adalah Nomor HP</li>
+                <li>Download KTA Anda setelah login</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-4">
+          <%= link_to new_session_path, class: "block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-200" do %>
+            <span class="flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+              </svg>
+              Login Sekarang
+            </span>
+          <% end %>
+
+          <%= link_to root_path, class: "block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-lg shadow transform hover:scale-105 transition duration-200 border-2 border-gray-300" do %>
+            <span class="flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+              Kembali ke Beranda
+            </span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center mt-8 text-white text-sm">
+      <p>Jika ada pertanyaan, hubungi admin Gerakan Rakyat</p>
+    </div>
+  </div>
+</div>
+
+<!-- Confetti Animation Script -->
+<script>
+(function() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  
+  const confetti = [];
+  const confettiCount = 150;
+  const colors = ['#10b981', '#059669', '#34d399', '#6ee7b7', '#a7f3d0', '#fbbf24', '#f59e0b'];
+  
+  // Create confetti particles
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * confettiCount,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      tilt: Math.floor(Math.random() * 10) - 10,
+      tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+      tiltAngle: 0
+    });
+  }
+  
+  // Draw confetti
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    confetti.forEach((particle, i) => {
+      ctx.beginPath();
+      ctx.lineWidth = particle.r / 2;
+      ctx.strokeStyle = particle.color;
+      ctx.moveTo(particle.x + particle.tilt + particle.r, particle.y);
+      ctx.lineTo(particle.x + particle.tilt, particle.y + particle.tilt + particle.r);
+      ctx.stroke();
+      
+      // Update position
+      particle.tiltAngle += particle.tiltAngleIncremental;
+      particle.y += (Math.cos(particle.d) + 3 + particle.r / 2) / 2;
+      particle.tilt = Math.sin(particle.tiltAngle - i / 3) * 15;
+      
+      // Reset if out of view
+      if (particle.y > canvas.height) {
+        confetti[i] = {
+          x: Math.random() * canvas.width,
+          y: -30,
+          r: particle.r,
+          d: particle.d,
+          color: particle.color,
+          tilt: particle.tilt,
+          tiltAngleIncremental: particle.tiltAngleIncremental,
+          tiltAngle: particle.tiltAngle
+        };
+      }
+    });
+    
+    requestAnimationFrame(draw);
+  }
+  
+  draw();
+  
+  // Handle resize
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+})();
+</script>
+
+<style>
+@keyframes scale-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.8s ease-out;
+}
+</style>

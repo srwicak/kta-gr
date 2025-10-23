@@ -40,6 +40,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 gem "prawn"
+gem "prawn-table"
 gem "rqrcode"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

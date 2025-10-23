@@ -1,14 +1,39 @@
 class Member < ApplicationRecord
   # Active Record Encryption
   encrypts :name
-  encrypts :phone
+  encrypts :phone, deterministic: true
   encrypts :nik, deterministic: true, downcase: true
+  encrypts :kta_number, deterministic: true, downcase: true
 
   has_secure_password validations: false
   has_one_attached :ktp_photo
   has_one_attached :selfie_photo
 
   validates :name, :nik, :phone, presence: true
+
+  # Validasi format nama: hanya huruf, spasi, titik, koma, dan apostrof
+  validates :name, format: {
+           with: /\A[a-zA-Z\s.',-]+\z/,
+           message: "hanya boleh berisi huruf, spasi, titik, koma, dan apostrof",
+         }, length: { minimum: 3, maximum: 100, message: "harus antara 3-100 karakter" }
+
+  # Validasi format NIK: harus 16 digit angka
+  validates :nik, format: {
+          with: /\A\d{16}\z/,
+          message: "harus berupa 16 digit angka",
+        }
+
+  # Validasi format nomor HP Indonesia
+  validates :phone, format: {
+            with: /\A08\d{8,11}\z/,
+            message: "tidak valid. Harus diawali dengan 08 (contoh: 081234567890)",
+          }
+
+  validates :nik_fingerprint, uniqueness: { message: "NIK sudah terdaftar. Satu NIK hanya bisa mendaftar satu kali." }
+  validates :phone_fingerprint, uniqueness: { message: "Nomor HP sudah terdaftar. Gunakan nomor HP yang berbeda." }
+  validates :ktp_photo, presence: { message: "Foto KTP harus diupload" }, on: :create
+  validates :selfie_photo, presence: { message: "Foto Selfie harus diupload" }, on: :create
+  validate :domicile_or_ktp_address_present, on: :create
 
   before_validation :set_defaults_from_nik, on: :create
   before_validation :set_initial_password_from_phone, on: :create
@@ -31,20 +56,70 @@ class Member < ApplicationRecord
       self.gender ||= (female ? "Perempuan" : "Laki-laki")
     end
     self.nik_fingerprint ||= Digest::SHA256.hexdigest(s)
+
+    # Set phone fingerprint (check jika column exists)
+    if phone.present? && respond_to?(:phone_fingerprint=)
+      phone_clean = phone.to_s.gsub(/\D/, "")
+      self.phone_fingerprint ||= Digest::SHA256.hexdigest(phone_clean)
+    end
   end
 
   def set_initial_password_from_phone
-    self.password = phone if password_digest.blank? && phone.present?
+    if password_digest.blank? && phone.present?
+      # Normalize phone number for password
+      phone_clean = phone.to_s.gsub(/\D/, "")
+      self.password = phone_clean
+    end
+  end
+
+  def domicile_or_ktp_address_present
+    # Pastikan ada alamat lengkap (dari domisili atau KTP)
+    prov = dom_area2_code.presence || area2_code
+    kota = dom_area4_code.presence || area4_code
+    kec = dom_area6_code.presence || area6_code
+
+    if prov.blank? || kota.blank? || kec.blank?
+      errors.add(:base, "Alamat domisili harus diisi lengkap (Provinsi, Kota, Kecamatan)")
+    end
   end
 
   def assign_kta_number
-    pref6 = (dom_area6_code.presence || area6_code)
-    raise ActiveRecord::RecordInvalid, "area6_code kosong" if pref6.blank?
+    # Gunakan alamat domisili jika ada, kalau tidak pakai alamat KTP
+    prov_code = (dom_area2_code.presence || area2_code)
+    kota_code = (dom_area4_code.presence || area4_code)
+    kec_code = (dom_area6_code.presence || area6_code)
+
+    # Validasi semua kode harus ada
+    raise ActiveRecord::RecordInvalid, "Kode wilayah tidak lengkap" if prov_code.blank? || kota_code.blank? || kec_code.blank?
+
+    # Format AABBCC dari kode wilayah
+    # AA = 2 digit provinsi, BB = 2 digit kota (digit 3-4), CC = 2 digit kecamatan (digit 5-6)
+    aa = prov_code[-2..-1]  # 2 digit terakhir provinsi
+    bb = kota_code[-2..-1]  # 2 digit terakhir kota
+    cc = kec_code[-2..-1]   # 2 digit terakhir kecamatan
+
+    prefix = "#{aa}#{bb}#{cc}"
+
     Member.transaction do
-      seq = KtaSequence.lock.find_by(area6_code: pref6) || KtaSequence.create!(area6_code: pref6, last_value: 0)
+      # Cari atau buat sequence untuk prefix ini
+      seq = KtaSequence.lock.find_by(area6_code: prefix) || KtaSequence.create!(area6_code: prefix, last_value: 0)
       seq.last_value += 1
       seq.save!
-      self.kta_number = sprintf("%s%010d", pref6, seq.last_value)
+
+      # Format: AABBCCYYYYYY (12 digit tanpa titik untuk database)
+      # Untuk tampilan, gunakan helper kta_number_formatted
+      self.kta_number = sprintf("%s%06d", prefix, seq.last_value)
+    end
+  end
+
+  # Helper untuk format KTA dengan titik untuk tampilan
+  # Contoh: 320101000001 -> NAGR: 320101.000001
+  def kta_number_formatted
+    return nil unless kta_number
+    if kta_number.length == 12
+      "NAGR: #{kta_number[0..5]}.#{kta_number[6..11]}"
+    else
+      "NAGR: #{kta_number}" # fallback jika format tidak sesuai
     end
   end
 
@@ -115,6 +190,20 @@ class Member < ApplicationRecord
   end
 
   def self.find_by_nik_plain(nik_plain)
-    where(nik: nik_plain).first
+    # Karena NIK di-encrypt, kita gunakan fingerprint untuk mencari
+    nik_clean = nik_plain.to_s.gsub(/\D/, "")
+    nik_hash = Digest::SHA256.hexdigest(nik_clean)
+    where(nik_fingerprint: nik_hash).first
+  end
+
+  def self.find_by_credentials(nik_plain, phone_plain)
+    # Karena NIK dan Phone di-encrypt, kita gunakan fingerprint untuk mencari
+    nik_clean = nik_plain.to_s.gsub(/\D/, "")
+    phone_clean = phone_plain.to_s.gsub(/\D/, "")
+
+    nik_hash = Digest::SHA256.hexdigest(nik_clean)
+    phone_hash = Digest::SHA256.hexdigest(phone_clean)
+
+    where(nik_fingerprint: nik_hash, phone_fingerprint: phone_hash).first
   end
 end

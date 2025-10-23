@@ -3,8 +3,13 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    member = Member.find_by_nik_plain(params[:nik])
-    if member&.authenticate(params[:phone])
+    # Cari member berdasarkan NIK dan Phone fingerprint
+    member = Member.find_by_credentials(params[:nik], params[:phone])
+
+    # Normalize phone number untuk authenticate
+    phone_input = params[:phone].to_s.gsub(/\D/, "")
+
+    if member&.authenticate(phone_input)
       session[:member_id] = member.id
       redirect_to member_path(member)
     else

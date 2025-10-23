@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[8.0].define(version: 2025_10_17_090000) do
+=======
+ActiveRecord::Schema[8.0].define(version: 2025_10_23_214500) do
+>>>>>>> b4cf981 (regisregis)
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -65,10 +69,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_090000) do
     t.integer "letter_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone_fingerprint"
     t.index ["kta_number"], name: "index_members_on_kta_number", unique: true
     t.index ["letter_year", "letter_month", "letter_sequence"], name: "index_members_on_letter_year_and_letter_month_and_letter_sequence", unique: true
     t.index ["nik"], name: "index_members_on_nik", unique: true
     t.index ["nik_fingerprint"], name: "index_members_on_nik_fingerprint", unique: true
+    t.index ["phone_fingerprint"], name: "index_members_on_phone_fingerprint", unique: true
   end
 
   create_table "wilayahs", force: :cascade do |t|

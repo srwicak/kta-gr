@@ -6,6 +6,24 @@
       <p class="text-gray-600">Lengkapi formulir pendaftaran di bawah ini</p>
     </div>
 
+    <% if @member.errors.any? %>
+      <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6">
+        <div class="flex items-start">
+          <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+          <div class="flex-1">
+            <h3 class="text-red-800 font-bold mb-2">Pendaftaran Gagal</h3>
+            <ul class="list-disc list-inside text-sm text-red-700 space-y-1">
+              <% @member.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <%= form_with model: @member, url: registrations_path, local: true, multipart: true, class: "space-y-6" do |f| %>
       
       <!-- Nama -->
@@ -17,7 +35,8 @@
       <!-- No HP -->
       <div>
         <%= f.label :phone, 'Nomor HP', class: "block text-sm font-semibold text-gray-700 mb-2" %>
-        <%= f.telephone_field :phone, required: true, placeholder: "08xxxxxxxxxx", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" %>
+        <%= f.telephone_field :phone, required: true, placeholder: "081234567890", pattern: "08[0-9]{8,11}", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" %>
+        <p class="text-xs text-gray-500 mt-1">Format: 08xx (contoh: 081234567890)</p>
       </div>
 
       <!-- NIK -->
@@ -97,18 +116,23 @@
 
       <!-- Upload Foto KTP -->
       <div>
-        <%= f.label :ktp_photo, 'Foto KTP', class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= f.label :ktp_photo, class: "block text-sm font-semibold text-gray-700 mb-2" do %>
+          Foto KTP <span class="text-red-500">*</span>
+        <% end %>
         <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50">
-          <%= f.file_field :ktp_photo, accept: 'image/*', class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
+          <%= f.file_field :ktp_photo, accept: 'image/*', required: true, class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
           <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, maksimal 5MB</p>
         </div>
       </div>
 
       <!-- Upload Foto Selfie -->
       <div>
-        <%= f.label :selfie_photo, 'Foto Selfie dengan KTP', class: "block text-sm font-semibold text-gray-700 mb-2" %>
+        <%= f.label :selfie_photo, class: "block text-sm font-semibold text-gray-700 mb-2" do %>
+          Foto Selfie (untuk KTA) <span class="text-red-500">*</span>
+        <% end %>
+        <p class="text-xs text-gray-500 mb-2">Pastikan foto terbaik dan jelas untuk ditampilkan di KTA Anda</p>
         <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50">
-          <%= f.file_field :selfie_photo, accept: 'image/*', class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
+          <%= f.file_field :selfie_photo, accept: 'image/*', required: true, class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
           <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, maksimal 5MB</p>
         </div>
       </div>
