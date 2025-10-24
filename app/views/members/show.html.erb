@@ -99,6 +99,16 @@
             </span>
           <% end %>
 
+          <!-- Download Surat Keterangan -->
+          <%= link_to letter_member_path(@member, format: :pdf, token: @member.signed_id(purpose: :membership_letter)), target: '_blank', class: "block w-full bg-white hover:bg-gray-50 text-red-700 font-bold py-4 px-6 rounded-lg shadow-lg border-2 border-red-600 transform hover:scale-105 transition duration-200" do %>
+            <span class="flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a1 1 0 011-1h4a1 1 0 011 1v2m-6 4h8a2 2 0 002-2V7a2 2 0 00-.586-1.414l-4-4A2 2 0 0013 1H7a2 2 0 00-2 2v16a2 2 0 002 2z"/>
+              </svg>
+              Download Surat Keterangan Anggota
+            </span>
+          <% end %>
+
           <!-- Logout Button -->
           <%= button_to session_path, method: :delete, class: "block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-lg shadow transform hover:scale-105 transition duration-200 border-2 border-gray-300" do %>
             <span class="flex items-center justify-center">
