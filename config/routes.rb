@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
   resources :members, only: [:show] do
     get :kta, on: :member
+    get :letter, on: :member
   end
 
   namespace :api do
