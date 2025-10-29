@@ -3,40 +3,8 @@ require "stringio"
 require "prawn/table"
 
 class MembersController < ApplicationController
-
-  before_action :require_login, except: :letter
-  before_action :set_member, only: [:show, :kta]
-
-  def show
-  end
-
-  def kta
-    respond_to do |format|
-      format.pdf do
-        pdf = Prawn::Document.new(page_size: "A7", page_layout: :landscape)
-        pdf.font_size 10
-        pdf.text "KARTU TANDA ANGGOTA", style: :bold, size: 14, align: :center
-        pdf.move_down 10
-        pdf.text "Nama: #{@member.name}"
-        pdf.text "No. KTA: #{@member.kta_number}"
-        masked_nik = @member.nik.to_s.gsub(/\d(?=\d{4})/, "•")
-        pdf.text "NIK: #{masked_nik}"
-        area_code = @member.dom_area6_code.presence || @member.area6_code
-        pdf.text "Wilayah: #{area_code}"
-
-        token = @member.signed_id(purpose: :membership_letter)
-        letter_path = letter_member_path(@member, format: :pdf, token: token)
-        letter_url = "#{request.base_url}#{letter_path}"
-        qrcode = RQRCode::QRCode.new(letter_url)
-        png = qrcode.as_png(size: 200)
-        pdf.move_down 10
-        pdf.image StringIO.new(png.to_s), width: 70, position: :right
-        pdf.move_down 5
-        pdf.text "Pindai QR untuk verifikasi surat anggota", size: 8, align: :right
-
-        send_data pdf.render, filename: "kta-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
-  before_action :require_login
-  skip_before_action :require_login, only: [:sk]
+  before_action :require_login, except: [:letter, :sk]
+  before_action :set_member, only: [:show, :kta, :sk]
 
   def show
     @member = Member.find_by!(public_id: params[:id])
@@ -46,17 +14,18 @@ class MembersController < ApplicationController
     @member = Member.find_by!(public_id: params[:id])
     respond_to do |format|
       format.pdf do
-        # Serve attached if exists; otherwise build, attach, and serve
         unless @member.kta_pdf.attached?
           @member.attach_kta_pdf!
         end
-        data = @member.kta_pdf.attached? ? @member.kta_pdf.download : @member.build_kta_pdf
-        send_data data, filename: "kta-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
 
+        data = @member.kta_pdf.attached? ? @member.kta_pdf.download : @member.build_kta_pdf
+        send_data data,
+                  filename: "kta-#{@member.kta_number}.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
       end
     end
   end
-
 
   def letter
     token = params[:token]
@@ -92,20 +61,22 @@ class MembersController < ApplicationController
 
         pdf.move_down 20
         pdf.text "Demikian surat keterangan ini dibuat untuk digunakan sebagaimana mestinya.", leading: 4
-
         pdf.move_down 40
         pdf.text "Jakarta, #{@member.letter_date.strftime('%d %B %Y')}", align: :right
         pdf.text "Dewan Pimpinan Pusat Gerakan Rakyat", align: :right
-
         pdf.move_down 60
         pdf.text "_____________________________", align: :right
         pdf.text "Ketua Umum", align: :right
 
-        send_data pdf.render, filename: "surat-anggota-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
+        send_data pdf.render,
+                  filename: "surat-anggota-#{@member.kta_number}.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
       end
     end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     head :not_found
+  end
 
   def sk
     @member = Member.find_by!(public_id: params[:id])
@@ -114,21 +85,23 @@ class MembersController < ApplicationController
         unless @member.sk_pdf.attached?
           @member.attach_sk_pdf!
         end
+
         data = @member.sk_pdf.attached? ? @member.sk_pdf.download : @member.build_sk_pdf
-        send_data data, filename: "sk-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
+        send_data data,
+                  filename: "sk-#{@member.kta_number}.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
       end
     end
-
   end
 
   private
 
-
   def set_member
     @member = Member.find(params[:id])
+  end
 
   def member_region_names(member)
-    # Uses dom_area codes; falls back to KTP area codes
     prov = member.dom_area2_code.presence || member.area2_code
     reg = member.dom_area4_code.presence || member.area4_code
     dis = member.dom_area6_code.presence || member.area6_code
@@ -136,6 +109,5 @@ class MembersController < ApplicationController
     dpd = Wilayah.find_by(level: Wilayah::LEVEL_REG, code_norm: reg)&.name.to_s
     dpc = Wilayah.find_by(level: Wilayah::LEVEL_DIS, code_norm: dis)&.name.to_s
     [dpw, dpd, dpc]
-
   end
 end
