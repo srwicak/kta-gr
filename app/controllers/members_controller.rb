@@ -106,7 +106,7 @@ class MembersController < ApplicationController
     end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     head :not_found
-=======
+
   def sk
     @member = Member.find_by!(public_id: params[:id])
     respond_to do |format|
