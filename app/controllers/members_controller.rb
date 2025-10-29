@@ -7,7 +7,7 @@ class MembersController < ApplicationController
   before_action :set_member, only: [:show, :kta, :sk]
 
   def show
-    @member = Member.find_by!(public_id: params[:id])
+    # @member is set by before_action :set_member using public_id
   end
 
   def kta
@@ -43,7 +43,7 @@ class MembersController < ApplicationController
         pdf.move_down 18
         pdf.text "SURAT KETERANGAN ANGGOTA GERAKAN RAKYAT", style: :bold, size: 14, align: :center
         pdf.move_down 5
-        pdf.text "Nomor : #{@member.letter_number || '-'}", align: :center
+        pdf.text "Nomor : #{@member.letter_number || "-"}", align: :center
 
         pdf.move_down 20
         pdf.text "Bersama ini kami menerangkan bahwa dibawah ini:", leading: 4
@@ -54,7 +54,7 @@ class MembersController < ApplicationController
           ["NAGR", @member.nagr_number.presence || "-"],
           ["DPC", @member.dpc_name.presence || "-"],
           ["DPD", @member.dpd_name.presence || "-"],
-          ["DPW", @member.dpw_name.presence || "-"]
+          ["DPW", @member.dpw_name.presence || "-"],
         ]
 
         pdf.table(details, cell_style: { borders: [], padding: [6, 4, 6, 4] }, column_widths: [100, 360])
@@ -62,7 +62,7 @@ class MembersController < ApplicationController
         pdf.move_down 20
         pdf.text "Demikian surat keterangan ini dibuat untuk digunakan sebagaimana mestinya.", leading: 4
         pdf.move_down 40
-        pdf.text "Jakarta, #{@member.letter_date.strftime('%d %B %Y')}", align: :right
+        pdf.text "Jakarta, #{@member.letter_date.strftime("%d %B %Y")}", align: :right
         pdf.text "Dewan Pimpinan Pusat Gerakan Rakyat", align: :right
         pdf.move_down 60
         pdf.text "_____________________________", align: :right
@@ -98,7 +98,8 @@ class MembersController < ApplicationController
   private
 
   def set_member
-    @member = Member.find(params[:id])
+    # Use public_id-friendly URLs (Member#to_param returns public_id)
+    @member = Member.find_by!(public_id: params[:id])
   end
 
   def member_region_names(member)
