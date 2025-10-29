@@ -1,11 +1,7 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Minimal valid members fixture to satisfy NOT NULL constraints in the DB.
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  name: "Fixture Member"
+  nik: "1201010101010001"
+  phone: "081234567890"
+  nik_fingerprint: "22e3431740e50c8bf30c986fbbc5997811690023b50e9fa3e1c6e691af51d1b6"
