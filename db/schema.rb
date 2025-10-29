@@ -10,15 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_090000) do
-=======
-ActiveRecord::Schema[8.0].define(version: 2025_10_23_214500) do
->>>>>>> b4cf981 (regisregis)
-=======
 ActiveRecord::Schema[8.0].define(version: 2025_10_29_110002) do
->>>>>>> 57e1852 (Feature: SK)
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -74,9 +66,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_110002) do
     t.string "dom_area6_code"
     t.string "kta_number"
     t.string "password_digest"
-    t.integer "letter_sequence"
-    t.integer "letter_month"
-    t.integer "letter_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "phone_fingerprint"
@@ -84,9 +73,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_110002) do
     t.text "dom_address"
     t.string "public_id"
     t.string "sk_number"
+    t.integer "letter_sequence"
+    t.integer "letter_month"
+    t.integer "letter_year"
     t.index ["dom_area10_code"], name: "index_members_on_dom_area10_code"
     t.index ["kta_number"], name: "index_members_on_kta_number", unique: true
-    t.index ["letter_year", "letter_month", "letter_sequence"], name: "index_members_on_letter_year_and_letter_month_and_letter_sequence", unique: true
+    t.index ["letter_year", "letter_month", "letter_sequence"], name: "idx_on_letter_year_letter_month_letter_sequence_872c4c2a5e", unique: true
     t.index ["nik"], name: "index_members_on_nik", unique: true
     t.index ["nik_fingerprint"], name: "index_members_on_nik_fingerprint", unique: true
     t.index ["phone_fingerprint"], name: "index_members_on_phone_fingerprint", unique: true

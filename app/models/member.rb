@@ -41,12 +41,12 @@ class Member < ApplicationRecord
   before_validation :set_initial_password_from_phone, on: :create
   before_create :assign_public_id
   before_create :assign_kta_number
-<<<<<<< HEAD
+
   before_create :assign_membership_letter_number
-=======
+
   before_create :assign_sk_number
   after_commit :ensure_pdfs_attached, on: :create
->>>>>>> 57e1852 (Feature: SK)
+
 
   def set_defaults_from_nik
     s = nik.to_s.gsub(/\D/, "")

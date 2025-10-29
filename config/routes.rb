@@ -10,11 +10,10 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
   resources :members, only: [:show] do
     get :kta, on: :member
-<<<<<<< HEAD
+
     get :letter, on: :member
-=======
+
     get :sk, on: :member
->>>>>>> 57e1852 (Feature: SK)
   end
 
   namespace :api do
