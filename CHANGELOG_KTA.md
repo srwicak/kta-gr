@@ -1,5 +1,13 @@
 # Changelog - Sistem Nomor KTA
 
+## Perubahan Tanggal 29 Oktober 2025
+
+### UI/UX Form Pendaftaran
+- Field NIK dan Nomor HP kini memunculkan keyboard angka di perangkat mobile:
+  - NIK: tambah `inputmode="numeric"` dan `pattern="[0-9]*"`
+  - Nomor HP: tambah `inputmode="numeric"`
+- Tujuan: mempercepat input dan mengurangi kesalahan ketik pada angka.
+
 ## Perubahan Tanggal 24 Oktober 2025
 
 ### 1. Format Nomor KTA

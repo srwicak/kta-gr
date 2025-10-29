@@ -3,6 +3,7 @@ require "stringio"
 require "prawn/table"
 
 class MembersController < ApplicationController
+<<<<<<< HEAD
   before_action :require_login, except: :letter
   before_action :set_member, only: [:show, :kta]
 
@@ -34,10 +35,30 @@ class MembersController < ApplicationController
         pdf.text "Pindai QR untuk verifikasi surat anggota", size: 8, align: :right
 
         send_data pdf.render, filename: "kta-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
+=======
+  before_action :require_login
+  skip_before_action :require_login, only: [:sk]
+
+  def show
+    @member = Member.find_by!(public_id: params[:id])
+  end
+
+  def kta
+    @member = Member.find_by!(public_id: params[:id])
+    respond_to do |format|
+      format.pdf do
+        # Serve attached if exists; otherwise build, attach, and serve
+        unless @member.kta_pdf.attached?
+          @member.attach_kta_pdf!
+        end
+        data = @member.kta_pdf.attached? ? @member.kta_pdf.download : @member.build_kta_pdf
+        send_data data, filename: "kta-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
+>>>>>>> 57e1852 (Feature: SK)
       end
     end
   end
 
+<<<<<<< HEAD
   def letter
     token = params[:token]
     return head :not_found if token.blank?
@@ -86,11 +107,36 @@ class MembersController < ApplicationController
     end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     head :not_found
+=======
+  def sk
+    @member = Member.find_by!(public_id: params[:id])
+    respond_to do |format|
+      format.pdf do
+        unless @member.sk_pdf.attached?
+          @member.attach_sk_pdf!
+        end
+        data = @member.sk_pdf.attached? ? @member.sk_pdf.download : @member.build_sk_pdf
+        send_data data, filename: "sk-#{@member.kta_number}.pdf", type: "application/pdf", disposition: "inline"
+      end
+    end
+>>>>>>> 57e1852 (Feature: SK)
   end
 
   private
 
+<<<<<<< HEAD
   def set_member
     @member = Member.find(params[:id])
+=======
+  def member_region_names(member)
+    # Uses dom_area codes; falls back to KTP area codes
+    prov = member.dom_area2_code.presence || member.area2_code
+    reg = member.dom_area4_code.presence || member.area4_code
+    dis = member.dom_area6_code.presence || member.area6_code
+    dpw = Wilayah.find_by(level: Wilayah::LEVEL_PROV, code_norm: prov)&.name.to_s
+    dpd = Wilayah.find_by(level: Wilayah::LEVEL_REG, code_norm: reg)&.name.to_s
+    dpc = Wilayah.find_by(level: Wilayah::LEVEL_DIS, code_norm: dis)&.name.to_s
+    [dpw, dpd, dpc]
+>>>>>>> 57e1852 (Feature: SK)
   end
 end

@@ -1,5 +1,5 @@
 <!-- app/views/registrations/success.html.erb -->
-<div class="min-h-screen bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-12 px-4 relative overflow-hidden">
+<div class="min-h-screen bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 py-12 px-4 relative overflow-hidden">
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none"></canvas>
   
@@ -7,16 +7,16 @@
     <!-- Success Card -->
     <div class="bg-white rounded-3xl shadow-2xl overflow-hidden transform animate-scale-in">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-10 text-center">
+      <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-10 text-center">
         <!-- Animated Check Icon -->
         <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full mb-4 animate-bounce-in">
-          <svg class="w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-16 h-16 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
           </svg>
         </div>
         
         <h1 class="text-4xl font-bold text-white mb-2">Selamat!</h1>
-        <p class="text-green-100 text-lg">Pendaftaran Anda Berhasil</p>
+        <p class="text-orange-100 text-lg">Pendaftaran Anda Berhasil</p>
       </div>
 
       <!-- Content -->
@@ -25,28 +25,28 @@
         <div class="text-center mb-8">
           <h2 class="text-2xl font-bold text-gray-800 mb-3">
             Anda Telah Menjadi Anggota<br/>
-            <span class="text-green-600">Gerakan Rakyat</span>
+            <span class="text-orange-600">Gerakan Rakyat</span>
           </h2>
           <p class="text-gray-600">Terima kasih telah bergabung bersama kami</p>
         </div>
 
         <!-- Member Number Card -->
-        <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-300 rounded-2xl p-8 mb-8">
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-300 rounded-2xl p-8 mb-8">
           <div class="text-center">
-            <p class="text-sm font-semibold text-green-700 uppercase tracking-wide mb-2">Nomor Anggota Anda</p>
+            <p class="text-sm font-semibold text-orange-700 uppercase tracking-wide mb-2">Nomor Anggota Anda</p>
             <div class="bg-white rounded-lg px-6 py-4 inline-block shadow-lg">
-              <p class="text-3xl font-bold text-green-600 font-mono tracking-wider">
+              <p class="text-3xl font-bold text-orange-600 font-mono tracking-wider">
                 <%= @member.kta_number_formatted %>
               </p>
             </div>
-            <p class="text-xs text-green-600 mt-3">Simpan nomor ini dengan baik</p>
+            <p class="text-xs text-orange-600 mt-3">Simpan nomor ini dengan baik</p>
           </div>
         </div>
 
         <!-- Member Info -->
         <div class="bg-gray-50 rounded-xl p-6 mb-8">
           <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
             </svg>
             Informasi Anggota
@@ -68,12 +68,12 @@
         </div>
 
         <!-- Next Steps -->
-        <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 mb-8">
+        <div class="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-4 mb-8">
           <div class="flex">
-            <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-5 h-5 text-orange-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
             </svg>
-            <div class="text-sm text-blue-700">
+            <div class="text-sm text-orange-700">
               <p class="font-semibold mb-1">Langkah Selanjutnya:</p>
               <ul class="list-disc list-inside space-y-1">
                 <li>Gunakan NIK untuk login</li>
@@ -86,7 +86,7 @@
 
         <!-- Action Buttons -->
         <div class="space-y-4">
-          <%= link_to new_session_path, class: "block w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-200" do %>
+          <%= link_to new_session_path, class: "block w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-200" do %>
             <span class="flex items-center justify-center">
               <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
@@ -125,7 +125,7 @@
   
   const confetti = [];
   const confettiCount = 150;
-  const colors = ['#10b981', '#059669', '#34d399', '#6ee7b7', '#a7f3d0', '#fbbf24', '#f59e0b'];
+  const colors = ['#ee4e2c', '#f16f4f', '#f9a08a', '#fdc9bd', '#ffe6df', '#f59e0b', '#f97316'];
   
   // Create confetti particles
   for (let i = 0; i < confettiCount; i++) {

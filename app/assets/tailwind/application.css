@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+/* Brand theme based on #ee4e2c */
+@theme {
+  /* Override Tailwind's orange scale to align site-wide accents with brand */
+  --color-orange-50:  #fff4f0;
+  --color-orange-100: #ffe6df;
+  --color-orange-200: #fdc9bd;
+  --color-orange-300: #f9a08a;
+  --color-orange-400: #f16f4f;
+  --color-orange-500: #ee4e2c; /* primary */
+  --color-orange-600: #d83f1f;
+  --color-orange-700: #b73416;
+  --color-orange-800: #942a12;
+  --color-orange-900: #7a240f;
+  --color-orange-950: #451308;
+
+  /* Optional neutrals slightly warmed to match brand vibe */
+  --color-gray-50:  #faf8f7;
+  --color-gray-100: #f3efee;
+  --color-gray-200: #e7e2e1;
+  --color-gray-300: #d6d0cf;
+  --color-gray-400: #b0aaaa;
+  --color-gray-500: #8c8786;
+  --color-gray-600: #6f6a69;
+  --color-gray-700: #585352;
+  --color-gray-800: #3f3b3a;
+  --color-gray-900: #2d2a29;
+}
+
 /* Custom base styles */
 @layer base {
   /* Smooth scrolling */
@@ -12,6 +40,7 @@
     @apply antialiased;
     @apply text-gray-900;
     @apply bg-gray-50;
+    accent-color: var(--color-orange-500);
   }
 
   /* Heading styles */
@@ -131,11 +160,13 @@
   }
 
   .badge-green {
-    @apply bg-green-100 text-green-800;
+    /* Remapped to brand */
+    @apply bg-orange-100 text-orange-800;
   }
 
   .badge-blue {
-    @apply bg-blue-100 text-blue-800;
+    /* Remapped to brand */
+    @apply bg-orange-100 text-orange-800;
   }
 
   .badge-red {
@@ -152,7 +183,8 @@
   }
 
   .alert-success {
-    @apply bg-green-50 border-l-4 border-green-500 text-green-800;
+    /* Brand-toned success */
+    @apply bg-orange-50 border-l-4 border-orange-500 text-orange-800;
   }
 
   .alert-error {
@@ -160,11 +192,13 @@
   }
 
   .alert-warning {
-    @apply bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800;
+    /* Brand-toned warning */
+    @apply bg-orange-50 border-l-4 border-orange-600 text-orange-900;
   }
 
   .alert-info {
-    @apply bg-blue-50 border-l-4 border-blue-500 text-blue-800;
+    /* Brand-toned info */
+    @apply bg-orange-50 border-l-4 border-orange-500 text-orange-800;
   }
 
   /* Table */

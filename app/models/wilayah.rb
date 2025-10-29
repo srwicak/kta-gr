@@ -3,4 +3,5 @@ class Wilayah < ApplicationRecord
   scope :provinsis, -> { where(level: LEVEL_PROV) }
   scope :regencies_of, ->(prov2) { where(level: LEVEL_REG, parent_code_norm: prov2) }
   scope :districts_of, ->(reg4) { where(level: LEVEL_DIS, parent_code_norm: reg4) }
+  scope :villages_of, ->(dis6) { where(level: LEVEL_VIL, parent_code_norm: dis6) }
 end

@@ -1,5 +1,5 @@
 <!-- app/views/registrations/new.html.erb -->
-<div data-controller="nik" class="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 py-8 px-4">
+<div data-controller="nik camera" class="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 py-8 px-4" data-camera-target="container">
   <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8">
     <div class="text-center mb-8">
       <h2 class="text-3xl font-bold text-orange-600 mb-2">Daftar Anggota</h2>
@@ -35,14 +35,14 @@
       <!-- No HP -->
       <div>
         <%= f.label :phone, 'Nomor HP', class: "block text-sm font-semibold text-gray-700 mb-2" %>
-        <%= f.telephone_field :phone, required: true, placeholder: "081234567890", pattern: "08[0-9]{8,11}", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" %>
+        <%= f.telephone_field :phone, required: true, placeholder: "081234567890", pattern: "08[0-9]{8,11}", inputmode: "numeric", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200" %>
         <p class="text-xs text-gray-500 mt-1">Format: 08xx (contoh: 081234567890)</p>
       </div>
 
       <!-- NIK -->
       <div>
         <%= f.label :nik, 'NIK (Nomor Induk Kependudukan)', class: "block text-sm font-semibold text-gray-700 mb-2" %>
-        <%= f.text_field :nik, required: true, placeholder: "16 digit NIK", maxlength: "16", data: { nik_target: 'nik', action: 'input->nik#onInput' }, class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 font-mono" %>
+        <%= f.text_field :nik, required: true, placeholder: "16 digit NIK", maxlength: "16", inputmode: "numeric", pattern: "[0-9]*", data: { nik_target: 'nik', action: 'input->nik#onInput' }, class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 font-mono" %>
       </div>
 
       <!-- Deteksi NIK -->
@@ -77,20 +77,13 @@
         </div>
       </div>
 
-      <!-- Checkbox Domisili Berbeda -->
-      <div class="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-4">
-        <label class="flex items-center cursor-pointer group">
-          <input type="checkbox" id="domicile-checkbox" name="member[domicile_diff]" value="1" data-action="change->nik#toggleDomicile" class="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500 focus:ring-2">
-          <span class="ml-3 text-sm font-semibold text-gray-700 group-hover:text-orange-600 transition duration-200">Domisili saya berbeda dengan KTP</span>
-        </label>
-      </div>
+      <!-- Alamat Domisili -->
+      <div class="space-y-4 bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-6">
+        <h3 class="text-lg font-bold text-orange-700 mb-1">Alamat Domisili</h3>
+        <p class="text-xs text-gray-600 mb-3">Jika domisili Anda sekarang berbeda dengan data KTP, mohon diisi dengan alamat terakhir Anda.</p>
 
-      <!-- Domisili Section -->
-      <div id="dom-wrap" class="hidden space-y-4 bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-6">
-        <h3 class="text-lg font-bold text-orange-700 mb-4">Alamat Domisili</h3>
-        
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">Provinsi Domisili</label>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Provinsi</label>
           <select name="member[dom_area2_code]" data-action="change->nik#loadRegencies" data-nik-target="domProv" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-white">
             <option value="">-- Pilih Provinsi --</option>
             <% Wilayah.provinsis.order(:code_norm).each do |p| %>
@@ -100,17 +93,29 @@
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">Kabupaten/Kota Domisili</label>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Kabupaten/Kota</label>
           <select name="member[dom_area4_code]" data-action="change->nik#loadDistricts" data-nik-target="domReg" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-white">
             <option value="">-- Pilih Kab/Kota --</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">Kecamatan Domisili</label>
-          <select name="member[dom_area6_code]" data-nik-target="domDis" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-white">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Kecamatan</label>
+          <select name="member[dom_area6_code]" data-action="change->nik#loadVillages" data-nik-target="domDis" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-white">
             <option value="">-- Pilih Kecamatan --</option>
           </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Kelurahan/Desa</label>
+          <select name="member[dom_area10_code]" data-nik-target="domVil" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200 bg-white">
+            <option value="">-- Pilih Kelurahan/Desa --</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Lengkap</label>
+          <textarea name="member[dom_address]" rows="3" placeholder="Nama jalan, nomor rumah, RT/RW, patokan, dsb." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-200"></textarea>
         </div>
       </div>
 
@@ -119,9 +124,17 @@
         <%= f.label :ktp_photo, class: "block text-sm font-semibold text-gray-700 mb-2" do %>
           Foto KTP <span class="text-red-500">*</span>
         <% end %>
-        <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50">
-          <%= f.file_field :ktp_photo, accept: 'image/*', required: true, class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
-          <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, maksimal 5MB</p>
+        <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50 space-y-3">
+          <%= f.file_field :ktp_photo, accept: 'image/*', required: true, capture: 'environment', class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer", data: { camera_target: 'ktpInput' } %>
+          <div class="flex items-center gap-2">
+            <button type="button" class="inline-flex items-center gap-2 bg-orange-600 text-white text-sm font-semibold px-3 py-2 rounded-lg hover:bg-orange-700" data-action="camera#openKtp">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5c2.485 0 4.5 2.015 4.5 4.5S14.485 14 12 14s-4.5-2.015-4.5-4.5S9.515 5 12 5Zm0-3c-4.136 0-7.5 3.364-7.5 7.5S7.864 17 12 17s7.5-3.364 7.5-7.5S16.136 2 12 2Z"/></svg>
+              Ambil pakai kamera
+            </button>
+            <span class="text-xs text-gray-500">Atau pilih file di atas</span>
+          </div>
+          <img data-camera-target="ktpPreview" alt="Preview KTP" class="hidden max-h-40 rounded-md border" />
+          <p class="text-xs text-gray-500">Format: JPG/PNG, maksimal 5MB</p>
         </div>
       </div>
 
@@ -131,9 +144,17 @@
           Foto Selfie (untuk KTA) <span class="text-red-500">*</span>
         <% end %>
         <p class="text-xs text-gray-500 mb-2">Pastikan foto terbaik dan jelas untuk ditampilkan di KTA Anda</p>
-        <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50">
-          <%= f.file_field :selfie_photo, accept: 'image/*', required: true, class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer" %>
-          <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, maksimal 5MB</p>
+        <div class="relative border-2 border-dashed border-orange-300 rounded-lg p-6 hover:border-orange-500 transition duration-200 bg-orange-50 space-y-3">
+          <%= f.file_field :selfie_photo, accept: 'image/*', required: true, capture: 'user', class: "w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600 file:cursor-pointer cursor-pointer", data: { camera_target: 'selfieInput' } %>
+          <div class="flex items-center gap-2">
+            <button type="button" class="inline-flex items-center gap-2 bg-orange-600 text-white text-sm font-semibold px-3 py-2 rounded-lg hover:bg-orange-700" data-action="camera#openSelfie">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5c2.485 0 4.5 2.015 4.5 4.5S14.485 14 12 14s-4.5-2.015-4.5-4.5S9.515 5 12 5Zm0-3c-4.136 0-7.5 3.364-7.5 7.5S7.864 17 12 17s7.5-3.364 7.5-7.5S16.136 2 12 2Z"/></svg>
+              Ambil pakai kamera
+            </button>
+            <span class="text-xs text-gray-500">Atau pilih file di atas</span>
+          </div>
+          <img data-camera-target="selfiePreview" alt="Preview Selfie" class="hidden max-h-40 rounded-md border" />
+          <p class="text-xs text-gray-500">Format: JPG/PNG, maksimal 5MB</p>
         </div>
       </div>
 
@@ -143,5 +164,24 @@
       </div>
 
     <% end %>
+  </div>
+
+  <!-- Modal Camera Overlay -->
+  <div class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" data-camera-target="modal" aria-modal="true" role="dialog">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div class="px-4 py-3 border-b flex items-center justify-between">
+        <h3 class="text-sm font-semibold text-gray-700" data-camera-target="modeLabel">Mode</h3>
+        <button type="button" class="text-gray-500 hover:text-gray-700" data-action="camera#closeModal">Tutup</button>
+      </div>
+        <div class="relative bg-black" style="aspect-ratio:3/4" data-camera-target="wrap">
+        <video class="w-full h-full object-cover" data-camera-target="video"></video>
+          <div data-camera-target="guide" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-orange-400 rounded-xl pointer-events-none shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]"></div>
+      </div>
+      <div class="p-4 flex items-center justify-between gap-3">
+        <button type="button" class="px-3 py-2 rounded-lg text-sm font-semibold bg-gray-100 hover:bg-gray-200" data-action="camera#closeModal">Batal</button>
+        <button type="button" class="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-orange-600 hover:bg-orange-700" data-action="camera#capture">Ambil</button>
+      </div>
+      <canvas data-camera-target="canvas" class="hidden"></canvas>
+    </div>
   </div>
 </div>
